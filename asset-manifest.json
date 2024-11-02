@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/avalon/static/css/main.8b166363.css",
-    "main.js": "/avalon/static/js/main.2eadcfd0.js",
+    "main.js": "/avalon/static/js/main.478f7221.js",
     "static/js/453.a97596db.chunk.js": "/avalon/static/js/453.a97596db.chunk.js",
     "static/media/アーサーの忠実なる家来.jpg": "/avalon/static/media/アーサーの忠実なる家来.d9b259d8a0efd34a3d04.jpg",
     "static/media/モードレット.jpg": "/avalon/static/media/モードレット.6ac4dffc331e1890571a.jpg",
@@ -11,11 +11,11 @@
     "static/media/暗殺者.jpg": "/avalon/static/media/暗殺者.f3b79c09087bb4834d7a.jpg",
     "index.html": "/avalon/index.html",
     "main.8b166363.css.map": "/avalon/static/css/main.8b166363.css.map",
-    "main.2eadcfd0.js.map": "/avalon/static/js/main.2eadcfd0.js.map",
+    "main.478f7221.js.map": "/avalon/static/js/main.478f7221.js.map",
     "453.a97596db.chunk.js.map": "/avalon/static/js/453.a97596db.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8b166363.css",
-    "static/js/main.2eadcfd0.js"
+    "static/js/main.478f7221.js"
   ]
 }
