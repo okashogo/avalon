@@ -35,9 +35,9 @@ const roles: Role[] = [
 ];
 
 function App() {
-  const [numParticipants, setNumParticipants] = useState<number | null>(null);
+  const [numParticipants, setNumParticipants] = useState<number | null>(12);
   const [initialNames, setInitialNames] = useState<string[]>([
-    'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Hank', 'Ivy', 'Jack', 'Kate', 'Leo'
+    '小野瀬', '荒井', '小池', '谷', '佐藤J', '佐土原', 'なお', 'あやの', '岡', '森田', '坪井', '斉藤'
   ]);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [roleCounts, setRoleCounts] = useState<RoleCount>({});
@@ -67,6 +67,7 @@ function App() {
   };
 
   const handleRoleCountChange = (roleName: string, count: number) => {
+    console.log("handleRoleCountChange", roleName, count);
     setRoleCounts((prev) => ({
       ...prev,
       [roleName]: count,
@@ -79,21 +80,33 @@ function App() {
   };
 
   const proceedToNameInput = () => {
-    // if (validateRoleCounts()) {
+    if (numParticipants === participants.length) {
       setCurrentStep(2);
-    // } else {
-    //   alert('役割の合計数が参加者数と一致しません。再設定してください。');
-    // }
+    } else {
+      alert('参加人数が一致しません。再設定してください。' + numParticipants + ' ' + participants.length);
+    }
   };
 
   const assignRoles = () => {
     const assignedRoles: Role[] = [];
+    const totalCount = Object.values(roleCounts).reduce((sum, count) => sum + count, 0);
+
+    if (totalCount !== participants.length) {
+      alert('役割の人数が一致しません。再設定してください。' + totalCount + ' ' + participants.length);
+      return;
+    }
+
     for (const role of roles) {
-      const count = roleCounts[role.name] || 0;
+      const count = roleCounts[role.name];
+      // if (!count) {
+      //   console.error("count is not defined", role.name, count, roleCounts);
+      // }
       for (let i = 0; i < count; i++) {
         assignedRoles.push(role);
       }
     }
+
+    console.log("assignedRoles",assignedRoles, roleCounts);
 
     const shuffledRoles = assignedRoles.sort(() => Math.random() - 0.5);
     setParticipants((prevParticipants) =>
@@ -102,18 +115,27 @@ function App() {
         role: shuffledRoles[index],
       }))
     );
+    console.log("participants",participants);
     setCurrentParticipantIndex(0); // Set the first participant index
     setCurrentStep(3);
   };
 
   const handleNext = () => {
-    if (currentParticipantIndex === null || currentParticipantIndex >= participants.length - 1) {
+    if (currentParticipantIndex === null) {
       setCurrentParticipantIndex(0);
-    } else {
+    } else if (currentParticipantIndex < participants.length - 1) {
       setCurrentParticipantIndex(currentParticipantIndex + 1);
+    } else {
+      setCurrentStep(4)
     }
     setIsRoleRevealed(false);
   };
+
+  const handleAnswer = () => {
+    if (window.confirm('本当に、答えを見ますか？')) {
+      setCurrentStep(5);
+    }
+  }
 
   const revealRole = () => {
     setIsRoleRevealed(true);
@@ -123,11 +145,12 @@ function App() {
     <div className="container mx-auto p-4">
       {currentStep === 0 && (
         <div>
-          <h1 className="text-2xl font-bold mb-4">参加人数を入力してください (最大12人)</h1>
+          <h1 className="text-2xl font-bold mb-4">参加人数を入力してください <br />(最大12人)</h1>
           <input
             type="number"
             placeholder="人数を入力"
             className="border p-2 mb-4 w-full"
+            defaultValue={12}
             onChange={(e) => setNumParticipants(Number(e.target.value))}
             max={initialNames.length}
           />
@@ -228,6 +251,39 @@ function App() {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {currentStep === 4 && (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">ゲーム開始</h1>
+          <button
+            onClick={handleAnswer}
+            className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+          >
+            答えを見る
+          </button>
+        </div>
+      )}
+
+      {currentStep === 5 && (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">答え</h1>
+          <div>
+            {participants.map((participant) => (
+              <div key={participant.id}>
+                {participant.name} : {participant.role?.name}
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => {
+              assignRoles()
+            }}
+            className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+          >
+            もう一度
+          </button>
         </div>
       )}
     </div>
