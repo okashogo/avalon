@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import './App.css'; // Ensure Tailwind CSS is imported in your project.
+import asa from './images/アーサーの忠実なる家来.jpg';
+import marlin from './images/マーリン.jpg';
+import ovelon from './images/オベロン.jpg';
+import morgana from './images/モルガナ.jpg';
+import modelet from './images/モードレット.jpg';
+import assassin from './images/暗殺者.jpg';
+
 
 type Role = {
   name: string;
   description: string;
+  image: string;
 };
 
 type Participant = {
@@ -17,13 +25,13 @@ type RoleCount = {
 };
 
 const roles: Role[] = [
-  { name: '暗殺者', description: 'モードレットの手下' },
-  { name: 'アーサーの忠実なる家来', description: '' },
-  { name: 'マーリン', description: '邪悪を知るが見つかってはならない' },
-  { name: 'パーシヴァル', description: 'マーリンを知る' },
-  { name: 'オベロン', description: '邪悪を知らず' },
-  { name: 'モルガナ', description: 'マーリンを装う' },
-  { name: 'モードレット', description: 'マーリンを知らず' }
+  { name: '暗殺者', description: 'モードレットの手下', image: assassin },
+  { name: 'アーサーの忠実なる家来', description: '', image: asa },
+  { name: 'マーリン', description: '邪悪を知るが見つかってはならない', image: marlin },
+  { name: 'パーシヴァル', description: 'マーリンを知る', image: ovelon },
+  { name: 'オベロン', description: '邪悪を知らず', image: ovelon },
+  { name: 'モルガナ', description: 'マーリンを装う', image: morgana },
+  { name: 'モードレット', description: 'マーリンを知らず', image: modelet }
 ];
 
 function App() {
@@ -205,7 +213,7 @@ function App() {
             <div>
               <h2 className="text-xl font-bold">あなたは「{participants[currentParticipantIndex].role?.name}」です。</h2>
               <img
-                src={`/images/${participants[currentParticipantIndex].role?.name}.jpg`}
+                src={participants[currentParticipantIndex].role?.image}
                 alt={participants[currentParticipantIndex].role?.name}
                 className="w-64 h-64 object-cover mx-auto my-4"
               />
