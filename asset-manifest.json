@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/my_avalon/static/css/main.e344596a.css",
+    "main.js": "/my_avalon/static/js/main.95921b9e.js",
+    "static/js/453.a97596db.chunk.js": "/my_avalon/static/js/453.a97596db.chunk.js",
+    "index.html": "/my_avalon/index.html",
+    "main.e344596a.css.map": "/my_avalon/static/css/main.e344596a.css.map",
+    "main.95921b9e.js.map": "/my_avalon/static/js/main.95921b9e.js.map",
+    "453.a97596db.chunk.js.map": "/my_avalon/static/js/453.a97596db.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e344596a.css",
+    "static/js/main.95921b9e.js"
+  ]
+}
