@@ -1,5 +1,16 @@
-import React, { useState } from "react";
-import "./App.css"; // Ensure Tailwind CSS is imported in your project.
+import React, { useState } from 'react';
+import './App.css'; // Ensure Tailwind CSS is imported in your project.
+
+// Import images dynamically
+function importAll(r: __WebpackModuleApi.RequireContext) {
+  let images: { [key: string]: string } = {};
+  r.keys().forEach((item) => {
+    images[item.replace('./', '').replace(/\.[^/.]+$/, '')] = r(item);
+  });
+  return images;
+}
+
+const images = importAll(require.context('./images', false, /\.(jpg|jpeg|png|gif)$/));
 
 type Role = {
   name: string;
@@ -17,13 +28,13 @@ type RoleCount = {
 };
 
 const roles: Role[] = [
-  { name: "暗殺者", description: "モードレットの手下" },
-  { name: "アーサーの忠実なる家来", description: "" },
-  { name: "マーリン", description: "邪悪を知るが見つかってはならない" },
-  { name: "パーシヴァル", description: "マーリンを知る" },
-  { name: "オベロン", description: "邪悪を知らず" },
-  { name: "モルガナ", description: "マーリンを装う" },
-  { name: "モードレット", description: "マーリンを知らず" },
+  { name: '暗殺者', description: 'モードレットの手下' },
+  { name: 'アーサーの忠実なる家来', description: '' },
+  { name: 'マーリン', description: '邪悪を知るが見つかってはならない' },
+  { name: 'パーシヴァル', description: 'マーリンを知る' },
+  { name: 'オベロン', description: '邪悪を知らず' },
+  { name: 'モルガナ', description: 'マーリンを装う' },
+  { name: 'モードレット', description: 'マーリンを知らず' }
 ];
 
 function App() {
@@ -31,16 +42,12 @@ function App() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [roleCounts, setRoleCounts] = useState<RoleCount>({});
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [currentParticipantIndex, setCurrentParticipantIndex] = useState<
-    number | null
-  >(null);
+  const [currentParticipantIndex, setCurrentParticipantIndex] = useState<number | null>(null);
   const [isRoleRevealed, setIsRoleRevealed] = useState<boolean>(false);
 
   const handleNumParticipantsSubmit = () => {
     if (numParticipants && numParticipants > 0) {
-      setParticipants(
-        Array.from({ length: numParticipants }, (_, i) => ({ id: i, name: "" }))
-      );
+      setParticipants(Array.from({ length: numParticipants }, (_, i) => ({ id: i, name: '' })));
       setCurrentStep(1);
     }
   };
@@ -61,10 +68,7 @@ function App() {
   };
 
   const validateRoleCounts = () => {
-    const totalRoles = Object.values(roleCounts).reduce(
-      (sum, count) => sum + count,
-      0
-    );
+    const totalRoles = Object.values(roleCounts).reduce((sum, count) => sum + count, 0);
     return totalRoles === participants.length;
   };
 
@@ -72,7 +76,7 @@ function App() {
     if (validateRoleCounts()) {
       setCurrentStep(2);
     } else {
-      alert("役割の合計数が参加者数と一致しません。再設定してください。");
+      alert('役割の合計数が参加者数と一致しません。再設定してください。');
     }
   };
 
@@ -97,10 +101,7 @@ function App() {
   };
 
   const handleNext = () => {
-    if (
-      currentParticipantIndex === null ||
-      currentParticipantIndex >= participants.length - 1
-    ) {
+    if (currentParticipantIndex === null || currentParticipantIndex >= participants.length - 1) {
       setCurrentParticipantIndex(0);
     } else {
       setCurrentParticipantIndex(currentParticipantIndex + 1);
@@ -116,9 +117,7 @@ function App() {
     <div className="container mx-auto p-4">
       {currentStep === 0 && (
         <div>
-          <h1 className="text-2xl font-bold mb-4">
-            参加人数を入力してください
-          </h1>
+          <h1 className="text-2xl font-bold mb-4">参加人数を入力してください</h1>
           <input
             type="number"
             placeholder="人数を入力"
@@ -137,9 +136,7 @@ function App() {
 
       {currentStep === 1 && (
         <div>
-          <h1 className="text-2xl font-bold mb-4">
-            役割の人数を設定してください
-          </h1>
+          <h1 className="text-2xl font-bold mb-4">役割の人数を設定してください</h1>
           {roles.map((role) => (
             <div key={role.name} className="mb-2">
               <label className="block font-bold mb-1">{role.name}</label>
@@ -147,9 +144,7 @@ function App() {
                 type="number"
                 min="0"
                 className="border p-2 w-full"
-                onChange={(e) =>
-                  handleRoleCountChange(role.name, Number(e.target.value))
-                }
+                onChange={(e) => handleRoleCountChange(role.name, Number(e.target.value))}
               />
             </div>
           ))}
@@ -189,10 +184,7 @@ function App() {
         <div>
           {!isRoleRevealed ? (
             <div>
-              <h2 className="text-xl font-bold">
-                {participants[currentParticipantIndex].name}さんの番です。
-                {participants[currentParticipantIndex].name}さんですか？
-              </h2>
+              <h2 className="text-xl font-bold">{participants[currentParticipantIndex].name}さんの番です。{participants[currentParticipantIndex].name}さんですか？</h2>
               <button
                 onClick={revealRole}
                 className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
@@ -202,13 +194,15 @@ function App() {
             </div>
           ) : (
             <div>
-              <h2 className="text-xl font-bold">
-                あなたは「{participants[currentParticipantIndex].role?.name}
-                」です。
-              </h2>
-              <p className="italic">
-                {participants[currentParticipantIndex].role?.description}
-              </p>
+              <h2 className="text-xl font-bold">あなたは「{participants[currentParticipantIndex].role?.name}」です。</h2>
+              {participants[currentParticipantIndex].role && images[participants[currentParticipantIndex].role.name] && (
+                <img
+                  src={images[participants[currentParticipantIndex].role.name]}
+                  alt={participants[currentParticipantIndex].role.name}
+                  className="w-64 h-64 object-cover mx-auto my-4"
+                />
+              )}
+              <p className="italic">{participants[currentParticipantIndex].role?.description}</p>
               <button
                 onClick={handleNext}
                 className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
@@ -218,9 +212,4 @@ function App() {
             </div>
           )}
         </div>
-      )}
-    </div>
-  );
-}
-
-export default App;
+     
