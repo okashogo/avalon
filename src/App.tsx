@@ -6,6 +6,7 @@ import ovelon from './images/オベロン.jpg';
 import morgana from './images/モルガナ.jpg';
 import modelet from './images/モードレット.jpg';
 import assassin from './images/暗殺者.jpg';
+import pacival from './images/パーシヴァル.jpg';
 
 
 type Role = {
@@ -28,7 +29,7 @@ const roles: Role[] = [
   { name: '暗殺者', description: 'モードレットの手下', image: assassin },
   { name: 'アーサーの忠実なる家来', description: '', image: asa },
   { name: 'マーリン', description: '邪悪を知るが見つかってはならない', image: marlin },
-  { name: 'パーシヴァル', description: 'マーリンを知る', image: ovelon },
+  { name: 'パーシヴァル', description: 'マーリンを知る', image: pacival },
   { name: 'オベロン', description: '邪悪を知らず', image: ovelon },
   { name: 'モルガナ', description: 'マーリンを装う', image: morgana },
   { name: 'モードレット', description: 'マーリンを知らず', image: modelet }
