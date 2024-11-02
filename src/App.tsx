@@ -1,19 +1,6 @@
 import React, { useState } from "react";
 import "./App.css"; // Ensure Tailwind CSS is imported in your project.
 
-// Import images dynamically
-function importAll(r: __WebpackModuleApi.RequireContext) {
-  let images: { [key: string]: string } = {};
-  r.keys().forEach((item) => {
-    images[item.replace("./", "").replace(/\.[^/.]+$/, "")] = r(item);
-  });
-  return images;
-}
-
-const images = importAll(
-  require.context("./images", false, /\.(jpg|jpeg|png|gif)$/)
-);
-
 type Role = {
   name: string;
   description: string;
@@ -41,6 +28,20 @@ const roles: Role[] = [
 
 function App() {
   const [numParticipants, setNumParticipants] = useState<number | null>(null);
+  const [initialNames, setInitialNames] = useState<string[]>([
+    "Alice",
+    "Bob",
+    "Charlie",
+    "David",
+    "Eve",
+    "Frank",
+    "Grace",
+    "Hank",
+    "Ivy",
+    "Jack",
+    "Kate",
+    "Leo",
+  ]);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [roleCounts, setRoleCounts] = useState<RoleCount>({});
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -50,10 +51,16 @@ function App() {
   const [isRoleRevealed, setIsRoleRevealed] = useState<boolean>(false);
 
   const handleNumParticipantsSubmit = () => {
-    if (numParticipants && numParticipants > 0) {
-      setParticipants(
-        Array.from({ length: numParticipants }, (_, i) => ({ id: i, name: "" }))
-      );
+    if (
+      numParticipants &&
+      numParticipants > 0 &&
+      numParticipants <= initialNames.length
+    ) {
+      const initialParticipants = initialNames.map((name, i) => ({
+        id: i,
+        name,
+      }));
+      setParticipants(initialParticipants);
       setCurrentStep(1);
     }
   };
@@ -64,6 +71,11 @@ function App() {
       updatedParticipants[index].name = name;
       return updatedParticipants;
     });
+  };
+
+  const removeParticipant = (index: number) => {
+    setInitialNames((prev) => prev.filter((_, i) => i !== index));
+    setParticipants((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleRoleCountChange = (roleName: string, count: number) => {
@@ -130,18 +142,23 @@ function App() {
       {currentStep === 0 && (
         <div>
           <h1 className="text-2xl font-bold mb-4">
-            参加人数を入力してください
+            参加人数を入力してください (最大12人)
           </h1>
           <input
             type="number"
             placeholder="人数を入力"
             className="border p-2 mb-4 w-full"
             onChange={(e) => setNumParticipants(Number(e.target.value))}
+            max={initialNames.length}
           />
           <button
             onClick={handleNumParticipantsSubmit}
             className="bg-blue-500 text-white px-4 py-2 rounded"
-            disabled={!numParticipants || numParticipants <= 0}
+            disabled={
+              !numParticipants ||
+              numParticipants <= 0 ||
+              numParticipants > initialNames.length
+            }
           >
             次へ
           </button>
@@ -149,6 +166,36 @@ function App() {
       )}
 
       {currentStep === 1 && (
+        <div>
+          <h1 className="text-2xl font-bold mb-4">
+            名前を編集または削除してください
+          </h1>
+          {initialNames.map((name, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <input
+                type="text"
+                value={name}
+                className="border p-2 w-full mr-2"
+                onChange={(e) => handleNameChange(index, e.target.value)}
+              />
+              <button
+                onClick={() => removeParticipant(index)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
+              >
+                削除
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={proceedToNameInput}
+            className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+          >
+            次へ
+          </button>
+        </div>
+      )}
+
+      {currentStep === 2 && (
         <div>
           <h1 className="text-2xl font-bold mb-4">
             役割の人数を設定してください
@@ -175,29 +222,6 @@ function App() {
         </div>
       )}
 
-      {currentStep === 2 && (
-        <div>
-          <h1 className="text-2xl font-bold mb-4">名前を入力してください</h1>
-          {participants.map((participant, index) => (
-            <div key={index} className="mb-2">
-              <input
-                type="text"
-                placeholder={`参加者 ${index + 1} の名前`}
-                className="border p-2 w-full"
-                onChange={(e) => handleNameChange(index, e.target.value)}
-              />
-            </div>
-          ))}
-          <button
-            onClick={assignRoles}
-            className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
-            disabled={participants.some((p) => !p.name.trim())}
-          >
-            役割を設定して開始
-          </button>
-        </div>
-      )}
-
       {currentStep === 3 && currentParticipantIndex !== null && (
         <div>
           {!isRoleRevealed ? (
@@ -219,16 +243,11 @@ function App() {
                 あなたは「{participants[currentParticipantIndex].role?.name}
                 」です。
               </h2>
-              {participants[currentParticipantIndex].role &&
-                images[participants[currentParticipantIndex].role.name] && (
-                  <img
-                    src={
-                      images[participants[currentParticipantIndex].role.name]
-                    }
-                    alt={participants[currentParticipantIndex].role.name}
-                    className="w-64 h-64 object-cover mx-auto my-4"
-                  />
-                )}
+              <img
+                src={`/images/${participants[currentParticipantIndex].role?.name}.jpg`}
+                alt={participants[currentParticipantIndex].role?.name}
+                className="w-64 h-64 object-cover mx-auto my-4"
+              />
               <p className="italic">
                 {participants[currentParticipantIndex].role?.description}
               </p>
