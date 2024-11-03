@@ -36,9 +36,9 @@ const roles: Role[] = [
 ];
 
 function App() {
-  const [numParticipants, setNumParticipants] = useState<number | null>(12);
+  const [numParticipants, setNumParticipants] = useState<number | null>(14);
   const [initialNames, setInitialNames] = useState<string[]>([
-    '小野瀬', '荒井', '小池', '谷', '佐藤J', '佐土原', 'なお', 'あやの', '岡', '森田', '坪井', '斉藤'
+    '小野瀬', '荒井', '小池', '谷', '佐藤J', '佐土原', 'なお', 'あやの', '岡', '森田', '坪井', '斉藤', "なかじ", "にいな"
   ]);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [roleCounts, setRoleCounts] = useState<RoleCount>({});
@@ -146,12 +146,12 @@ function App() {
     <div className="container mx-auto p-4">
       {currentStep === 0 && (
         <div>
-          <h1 className="text-2xl font-bold mb-4">参加人数を入力してください <br />(最大12人)</h1>
+          <h1 className="text-2xl font-bold mb-4">参加人数を入力してください <br />(最大14人)</h1>
           <input
             type="number"
             placeholder="人数を入力"
             className="border p-2 mb-4 w-full"
-            defaultValue={12}
+            defaultValue={14}
             onChange={(e) => setNumParticipants(Number(e.target.value))}
             max={initialNames.length}
           />
