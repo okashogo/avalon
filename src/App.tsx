@@ -142,6 +142,24 @@ function App() {
     setIsRoleRevealed(true);
   };
 
+  const getVisibleRoles = (roleName: string | undefined) => {
+    if (!roleName) {
+      return [];
+    }
+    if (roleName === 'マーリン') {
+      return participants.filter(p => ['暗殺者', 'モルガナ', 'オベロン'].includes(p.role?.name || ''));
+    }
+    if (['暗殺者', 'モードレット', 'モルガナ'].includes(roleName)) {
+      return participants.filter(p => ['暗殺者', 'モードレット', 'モルガナ'].includes(p.role?.name || ''));
+    }
+    if (roleName === 'パーシヴァル') {
+      return participants.filter(p => ['マーリン', 'モルガナ'].includes(p.role?.name || ''));
+    }
+    return [];
+  };
+
+  // console.log('aaaa', currentParticipantIndex ? currentParticipantIndex : "0", currentParticipantIndex ? participants[currentParticipantIndex] : "0", currentParticipantIndex ?   participants[currentParticipantIndex]?.role?.name : "0");
+
   return (
     <div className="container mx-auto p-4">
       {currentStep === 0 && (
@@ -235,7 +253,7 @@ function App() {
             </div>
           ) : (
             <div>
-              <h2 className="text-xl font-bold">あなたは「{participants[currentParticipantIndex].role?.name}」です。</h2>
+              <h2 className="text-xl font-bold">{participants[currentParticipantIndex].name}さんは「{participants[currentParticipantIndex].role?.name}」です。</h2>
               <img
                 src={participants[currentParticipantIndex].role?.image}
                 alt={participants[currentParticipantIndex].role?.name}
@@ -244,6 +262,16 @@ function App() {
               <p className="italic">
                 {participants[currentParticipantIndex].role?.description}
               </p>
+              {currentParticipantIndex >= 0 && participants[currentParticipantIndex] && (
+                <div className="mt-4">
+                  <h3 className="text-lg font-bold">あなたが見える役割:</h3>
+                  <ul className="list-disc pl-6">
+                    {currentParticipantIndex >= 0 && participants[currentParticipantIndex] && getVisibleRoles(participants[currentParticipantIndex]?.role?.name || '').length > 0 ? (getVisibleRoles(participants[currentParticipantIndex]?.role?.name) || []).map((p) => (
+                      <li key={p.id}>{p.name} ({p.role?.name})</li>
+                    )) : <li>あなたは見える役割を持っていません。</li>}
+                  </ul>
+                </div>
+              )}
               <button
                 onClick={handleNext}
                 className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
