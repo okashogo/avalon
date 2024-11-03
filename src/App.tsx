@@ -163,13 +163,13 @@ function App() {
       return [];
     }
     if (roleName === 'マーリン') {
-      return '暗殺者 or モルガナ or オベロン';
+      return '暗殺者 or モルガナ or オベロン (悪側)';
     }
     if (['暗殺者', 'モードレット', 'モルガナ'].includes(roleName)) {
-      return '暗殺者 or モードレット or モルガナ';
+      return '暗殺者 or モードレット or モルガナ (悪側の味方)';
     }
     if (roleName === 'パーシヴァル') {
-      return 'マーリン or モルガナ';
+      return 'マーリン or モルガナ (正義 or 悪側)';
     }
     return '';
   };
@@ -282,8 +282,11 @@ function App() {
                 <div className="mt-4">
                   <h3 className="text-lg font-bold">あなたが見える役割:</h3>
                   <ul className="list-disc pl-6">
+                    <div className='my-4 font-bold'>
+                      {getMultiRole(participants[currentParticipantIndex]?.role?.name)}
+                    </div>
                     {currentParticipantIndex >= 0 && participants[currentParticipantIndex] && getVisibleRoles(participants[currentParticipantIndex]?.role?.name || '').length > 0 ? (getVisibleRoles(participants[currentParticipantIndex]?.role?.name) || []).map((p) => (
-                      <li key={p.id}>{p.name} (getMultiRole(participants[currentParticipantIndex]?.role?.name))</li>
+                      <li key={p.id}>{p.name}</li>
                     )) : <li>あなたは見える役割を持っていません。</li>}
                   </ul>
                 </div>
