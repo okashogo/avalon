@@ -158,6 +158,22 @@ function App() {
     return [];
   };
 
+  const getMultiRole = (roleName: string | undefined) => {
+    if (!roleName) {
+      return [];
+    }
+    if (roleName === 'マーリン') {
+      return '暗殺者 or モルガナ or オベロン';
+    }
+    if (['暗殺者', 'モードレット', 'モルガナ'].includes(roleName)) {
+      return '暗殺者 or モードレット or モルガナ';
+    }
+    if (roleName === 'パーシヴァル') {
+      return 'マーリン or モルガナ';
+    }
+    return '';
+  };
+
   // console.log('aaaa', currentParticipantIndex ? currentParticipantIndex : "0", currentParticipantIndex ? participants[currentParticipantIndex] : "0", currentParticipantIndex ?   participants[currentParticipantIndex]?.role?.name : "0");
 
   return (
@@ -267,7 +283,7 @@ function App() {
                   <h3 className="text-lg font-bold">あなたが見える役割:</h3>
                   <ul className="list-disc pl-6">
                     {currentParticipantIndex >= 0 && participants[currentParticipantIndex] && getVisibleRoles(participants[currentParticipantIndex]?.role?.name || '').length > 0 ? (getVisibleRoles(participants[currentParticipantIndex]?.role?.name) || []).map((p) => (
-                      <li key={p.id}>{p.name} ({p.role?.name})</li>
+                      <li key={p.id}>{p.name} (getMultiRole(participants[currentParticipantIndex]?.role?.name))</li>
                     )) : <li>あなたは見える役割を持っていません。</li>}
                   </ul>
                 </div>
