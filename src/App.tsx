@@ -163,7 +163,7 @@ function App() {
       return [];
     }
     if (roleName === 'マーリン') {
-      return '暗殺者 or モルガナ or オベロン (悪側)';
+      return '暗殺者 or モルガナ or オベロン (モードレット以外の悪側)';
     }
     if (['暗殺者', 'モードレット', 'モルガナ'].includes(roleName)) {
       return '暗殺者 or モードレット or モルガナ (悪側の味方)';
